@@ -6,7 +6,7 @@ class Swiper extends Component{
     movePoint=0//移动的点touchmove
     endPoint=0//结束的点touchend
     moveingStart=false//判断是否开始touchstart
-    isMoving=0//判断是否正在移动touchmove -1 左 1 右
+    
     swiperWidth="100%"//幻灯片的宽度
     swiperHeight="100%"//幻灯片的高度
     initMovex=0//幻灯片开始的位置
@@ -17,7 +17,7 @@ class Swiper extends Component{
         this.swiper=(refs)=>{
             console.log(refs)
             this.swiperWidth=refs.offsetWidth
-            //this.swiperHeight=refs.offsetHeight
+            this.swiperHeight=refs.offsetHeight
         }
         this.bounds={
             min:0,
@@ -25,12 +25,16 @@ class Swiper extends Component{
         }
         this.state={
             moveX:0,
-            isTransition:false
+            isMoving:0,//判断是否正在移动touchmove -1 左 1 右
+            isTransition:false,
+            isLoaded:false
         }
         this.sensitive=props.sensitive||0.5;
     }
     componentDidMount(){
-
+        this.setState({
+            isLoaded:true
+        })
     }
     getPointX(e){
         return e.touches[0].clientX||false
@@ -82,10 +86,25 @@ class Swiper extends Component{
             isTransition:true,
             moveX:-slideIndex*this.swiperWidth+this.initMovex
         })
-        this.isMoving=0
+        
+    }
+    transitionend(){
+        this.setState({
+            isMoving:0,
+            isTransition:false
+        })
+    }
+    renderTpl(item,index){
+        if(!this.state.isLoaded||this.state.isTransition) return "" 
+        let SliderTpl=item.tpl;
+        return <SliderTpl 
+        width={this.swiperWidth} 
+        height={this.swiperHeight} 
+        data={item} 
+        isMoving={this.isMoving}
+        isActive={this.currentSliderIndex===index}/>
     }
     render(){
-        let {SliderTpl}=this.props
         let {moveX,isTransition}=this.state
         let transitionDuration=isTransition?"300ms":"0ms",
             transformX=`translate3d(${moveX}px, 0px, 0px)`;
@@ -96,15 +115,16 @@ class Swiper extends Component{
                 onTouchStart={(e)=>{this.touchstart(e)}}
                 onTouchMove={(e)=>{this.touchmove(e)}}
                 onTouchEnd={(e)=>{this.touchend(e)}}
+                onTransitionEnd={(e)=>{this.transitionend()}}
                 style={{         
-                    webkitTransitionDuration:transitionDuration,
+                    WebkitTransitionDuration:transitionDuration,
                     transitionDuration:transitionDuration,
-                    webkitTransform:transformX,
+                    WebkitTransform:transformX,
                     transform:transformX,
                     height:this.swiperHeight
                 }}
             >
-            {[1,2,3].map((item)=><div className={SwiperCSS.SwiperSlider}><SliderTpl text={item}/></div>)}
+            {this.props.data.map((item,index)=><div className={SwiperCSS.SwiperSlider} key={"SwiperSlider"+index}>{this.renderTpl(item,index)}</div>)}
             </div>
         )
     }

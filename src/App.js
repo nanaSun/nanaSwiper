@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Swiper from './components/Swiper'
 import SliderTpl from './components/SliderTpl'
+import SliderSprite from './components/SliderSprite'
 import './App.css';
 import img1 from "./images/test1.jpg"
 import img1Bkg from "./images/test1_bkg.jpg"
@@ -23,9 +24,21 @@ class App extends Component {
             <Swiper SliderTpl={SliderTpl} sensitive={.2} 
             data={[
               {
-                img:"./images/"
-              },
-              {},
+                tpl:SliderSprite,
+                spriteImg:img1,
+                spriteConf:[3,1,222,350],
+                img:img1Bkg
+              },{
+                tpl:SliderTpl,
+                spriteImg:img2,
+                spriteConf:[3,1,222,350],
+                img:img2Bkg
+              },{
+                tpl:SliderSprite,
+                spriteImg:img3,
+                spriteConf:[3,1,222,350],
+                img:img3Bkg
+              }
             ]}/>
         </div>
       </div>
