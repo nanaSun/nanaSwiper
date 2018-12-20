@@ -1,0 +1,21 @@
+.SwiperWrapper{
+    position: relative;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+    display: flex;
+    transition-property: transform;
+    box-sizing: content-box;
+    will-change: transition;
+}
+.SwiperSlider{
+    background: #eee;
+    color: #333;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    flex-shrink:0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
