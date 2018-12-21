@@ -18,10 +18,16 @@ class App extends Component {
         <ul>
           <li>1、可以滑动</li>
           <li>2、可以自动滑动到下一页</li>
+          <li>3、可以自定义模板</li>
+          <li>4、设置灵敏度</li>
+          <li>5、特效</li>
+          <li>6、无限轮播图</li>
         </ul>
         {/* // 用于固定Swiper大小 */}
         <div className="SwiperContainer">
-            <Swiper SliderTpl={SliderTpl} sensitive={.2} 
+            <Swiper 
+            initMovex={.1}
+            sensitive={.2} 
             data={[
               {
                 tpl:SliderSprite,

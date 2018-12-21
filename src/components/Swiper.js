@@ -14,10 +14,15 @@ class Swiper extends Component{
     sensitive//灵明度
     constructor(props){
         super(props)
+        this.sensitive=props.sensitive||0.5;
+        this.initMovex=props.initMovex||0;
         this.swiper=(refs)=>{
-            console.log(refs)
-            this.swiperWidth=refs.offsetWidth
-            this.swiperHeight=refs.offsetHeight
+            console.log(refs,this.initMovex)
+            if(refs){
+                this.initMovex=this.initMovex*refs.offsetWidth
+                this.swiperWidth=refs.offsetWidth-this.initMovex*2
+                this.swiperHeight=refs.offsetHeight
+            }
         }
         this.bounds={
             min:0,
@@ -29,10 +34,11 @@ class Swiper extends Component{
             isTransition:false,
             isLoaded:false
         }
-        this.sensitive=props.sensitive||0.5;
+        
     }
     componentDidMount(){
         this.setState({
+            moveX:this.initMovex,
             isLoaded:true
         })
     }
@@ -40,12 +46,15 @@ class Swiper extends Component{
         return e.touches[0].clientX||false
     }
     touchstart(e){
+        e.preventDefault();
         this.startPoint=this.getPointX(e)
         this.movePoint=this.startPoint
         this.endPoint=this.startPoint
         this.moveingStart=true;
+        
     }
     touchmove(e){
+        e.preventDefault();
         this.endPoint=this.getPointX(e)
         let changePos=this.endPoint-this.movePoint+this.state.moveX;
         this.movePoint=this.endPoint
@@ -55,6 +64,7 @@ class Swiper extends Component{
             isTransition:false,
             moveX:changePos
         })
+        
     }
     touchend(){
         this.moveingStart=false;
@@ -63,6 +73,7 @@ class Swiper extends Component{
         }else{
             this.isMoving=0
         }
+        e.preventDefault();
     }
     calculateSlider(){
         let {min,max}=this.bounds
@@ -89,13 +100,13 @@ class Swiper extends Component{
         
     }
     transitionend(){
+        this.isMoving=0
         this.setState({
-            isMoving:0,
             isTransition:false
         })
     }
     renderTpl(item,index){
-        if(!this.state.isLoaded||this.state.isTransition) return "" 
+        if(!this.state.isLoaded) return ""
         let SliderTpl=item.tpl;
         return <SliderTpl 
         width={this.swiperWidth} 
@@ -124,7 +135,12 @@ class Swiper extends Component{
                     height:this.swiperHeight
                 }}
             >
-            {this.props.data.map((item,index)=><div className={SwiperCSS.SwiperSlider} key={"SwiperSlider"+index}>{this.renderTpl(item,index)}</div>)}
+            {this.props.data.map((item,index)=><div 
+                className={SwiperCSS.SwiperSlider+(index===this.currentSliderIndex?(" "+SwiperCSS.SwiperActive):"")}
+                style={{width:this.swiperWidth}} 
+                key={"SwiperSlider"+index}>
+                {this.renderTpl(item,index)}
+            </div>)}
             </div>
         )
     }

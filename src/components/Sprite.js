@@ -24,11 +24,16 @@ export class Sprite extends Component {
     animationTimeout=null
     constructor(props){
         super(props)
+        console.log(props)
         //初始化
         this.canvasWidth=props.width*2
         this.canvasHeight=props.height*2
-        this.image.src=props.sprite
+        this.image.src=props.data.spriteImg
         this.loadImagePromise=this.loadImg()
+        
+        if(this.props.data.spriteConf&&this.props.data.spriteConf.length===4) 
+            [this.row,this.col,this.fpsWidth,this.fpsHeight]=this.props.data.spriteConf
+
         this.canvas=(refs)=>{
             if(refs) {
                 //获取绘图环境
@@ -38,19 +43,21 @@ export class Sprite extends Component {
             }
         }
     }
-    componentWillReceiveProps(props){
-        console.log(this.props.isMoving);
-        if(this.props.isMoving!==0){
+    shouldComponentUpdate(props){//当幻灯片疯狂滑动的时候，停止滑动
+        if(props.isMoving!==0){
             this.stop=true
+            return false
         }else{
-            
-            this.context=this.refs.getContext("2d")
-            console.log(this.context)
-            this.stop=false
+            return true
         }
     }
+    componentDidUpdate(){//当幻灯片停止滑动的时候，更新组件，重新获取context
+        this.context=this.refs.getContext("2d")
+        this.stop=false
+        this.animate()
+        console.log("componentDidUpdate",this.context)
+    }
     componentDidMount(){
-        console.log("canvas loaded")
         this.currentRow=0
         this.currentCol=0
         //初始化之后，设定动画不停止
@@ -61,7 +68,6 @@ export class Sprite extends Component {
                 //图片加载完之后才算真正加载完
                 this.loaded=true
             },(e)=>console.log(e)) 
-            if(this.props.conf&&this.props.conf.length===4) [this.row,this.col,this.fpsWidth,this.fpsHeight]=this.props.conf
         }else{
             this.animate()
         }
@@ -71,6 +77,7 @@ export class Sprite extends Component {
         //卸载后，清除canvas
         this.stop=true
         if(this.context.clearRect) this.context.clearRect(0,0,this.canvasWidth,this.canvasHeight)
+        this.image=null
     }
     animate(){
         if(this.fps>=4){//此处控制速度

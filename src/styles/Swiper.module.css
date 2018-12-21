@@ -8,7 +8,9 @@
     box-sizing: content-box;
     will-change: transition;
 }
+
 .SwiperSlider{
+    box-sizing: border-box;
     background: #eee;
     color: #333;
     width: 100%;
@@ -18,4 +20,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    transform: scale3d(0.9,0.9,1);
+    will-change: transform;
+    border: 5px solid #aa9c9c;
+    box-shadow: 5px 5px 6px rgba(0, 0, 0,0.4);
+    background-repeat: no-repeat;
+    background-position:0 0;
+}
+.SwiperSlider.SwiperActive{
+    transform: scale3d(1,1,1);
 }
