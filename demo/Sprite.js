@@ -80,8 +80,7 @@ export class Sprite extends Component {
         this.image=null
     }
     animate(){
-        if(this.fps>=4){//此处控制速度
-            
+        if(this.fps>=60){//此处控制速度
             this.fps=0
             let cr=this.currentRow, cc=this.currentCol;
             if(cr===this.row){
@@ -100,8 +99,9 @@ export class Sprite extends Component {
         else{ console.log(this)}
     }
     drawSpirt(){
+        if(this.stop) return
         let cr=this.currentRow, cc=this.currentCol;
-        if(this.context.drawImage) this.context.drawImage(this.image,cr*this.fpsWidth,cc*this.fpsHeight,this.fpsWidth,this.fpsHeight,0,0,this.canvasWidth,this.canvasHeight)
+        if("drawImage" in this.context){this.context.drawImage(this.image,cr*this.fpsWidth,cc*this.fpsHeight,this.fpsWidth,this.fpsHeight,0,0,this.canvasWidth,this.canvasHeight)}
     }
     loadImg(){
         return new Promise((rs,rj)=>{

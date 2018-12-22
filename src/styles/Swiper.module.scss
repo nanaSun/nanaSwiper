@@ -7,6 +7,7 @@
     transition-property: transform;
     box-sizing: content-box;
     will-change: transition;
+    touch-action: none;
 }
 
 .SwiperSlider{
@@ -30,4 +31,27 @@
 }
 .SwiperSlider.SwiperActive{
     transform: scale3d(1,1,1);
+}
+.SwiperSliderNav {
+    display:flex;
+    justify-content: center;
+    position: absolute;
+    bottom: 0px;
+    left:0px;
+    width: 100%;
+    padding: 10px 0;
+    // background: rgba(0, 0, 0, 0.3);
+    z-index: 10;
+    .SwiperItemNav{
+        width: 10px;
+        height: 10px;
+        border-radius: 10px;
+        overflow: hidden;
+        background: gray;
+        flex-shrink: 0;
+        margin:0 10px;
+        &.SwiperNavActive{
+            background: red;
+        }
+    }
 }

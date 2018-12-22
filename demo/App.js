@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import Swiper from './components/Swiper'
-import SliderTpl from './components/SliderTpl'
-import SliderSprite from './components/SliderSprite'
+import Swiper from '../index'
+import SliderSprite from './SliderSprite'
 import './App.css';
 import img1 from "./images/test1.jpg"
 import img1Bkg from "./images/test1_bkg.jpg"
@@ -9,6 +8,7 @@ import img2 from "./images/test2.jpg"
 import img2Bkg from "./images/test2_bkg.jpg"
 import img3 from "./images/test3.jpg"
 import img3Bkg from "./images/test3_bkg.jpg"
+console.log(Swiper)
 class App extends Component {
   render() {
     return (
@@ -28,6 +28,7 @@ class App extends Component {
             <Swiper 
             initMovex={.1}
             sensitive={.2} 
+            isLoop={true}
             data={[
               {
                 tpl:SliderSprite,
@@ -35,7 +36,7 @@ class App extends Component {
                 spriteConf:[3,1,222,350],
                 img:img1Bkg
               },{
-                tpl:SliderTpl,
+                //tpl:SliderSprite,
                 spriteImg:img2,
                 spriteConf:[3,1,222,350],
                 img:img2Bkg
