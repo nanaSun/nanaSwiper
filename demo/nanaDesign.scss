@@ -1,0 +1,13 @@
+.nanaDesign{
+    background: blue;
+}
+.nanaDesignSlider{
+    &.nanaDesignActive{
+        background:yellow;
+    }
+    & .defaultSlider{
+        background-size:auto 100%;
+        width: 100%;
+        height: 100%;
+    }
+}

@@ -1,5 +1,8 @@
 const path = require('path');
+const webpack = require('webpack');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
+
+
 
 // style files regexes
 const cssRegex = /\.css$/;
@@ -27,10 +30,11 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
         plugins: () => [
           require('postcss-flexbugs-fixes'),
           require('postcss-preset-env')({
-            autoprefixer: {
-              flexbox: 'no-2009',
-            },
-            stage: 3,
+            // autoprefixer: {
+            //   flexbox: 'no-2009',
+            // },
+            // stage: 3,
+            browsers: 'last 8 versions'
           }),
         ],
       },
@@ -41,11 +45,10 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
   }
   return loaders;
 };
-console.log(__dirname)
 const config = {
   context:__dirname,
-  mode: 'development',
-  entry: path.join(__dirname, 'src/Swiper.js'),
+  mode: 'production',
+  entry: path.join(__dirname, 'src/index.js'),
   output: {
     path: path.join(__dirname),
     filename: 'index.js',
@@ -57,6 +60,12 @@ const config = {
     extensions: ['.js', '.jsx']
   },
   plugins: [
+    new webpack.DefinePlugin({ 
+      'process.env': { 
+        NODE_ENV: JSON.stringify("production"), 
+        PUBLIC_URL: JSON.stringify("")
+      } 
+    }),
   ],
 
   module: {

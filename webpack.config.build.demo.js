@@ -3,11 +3,7 @@ const webpack = require('webpack');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
-const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
-const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
-const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
-const getCacheIdentifier = require('react-dev-utils/getCacheIdentifier');
+const CleanWebpackPlugin = require('clean-webpack-plugin')
 
 
 // style files regexes
@@ -54,11 +50,8 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
 
 const config = {
   context: __dirname,
-  mode: 'development',
-  entry: [
-    require.resolve('react-dev-utils/webpackHotDevClient'),
-    path.join(__dirname, 'demo/index.js')
-  ],
+  mode: 'production',
+  entry: path.join(__dirname, 'demo/index.js'),
   output: {
     path: path.join(__dirname, 'demo/dist'),
     filename: '[name].[hash].js'
@@ -75,11 +68,21 @@ const config = {
     runtimeChunk: true,
   },
   plugins: [
+    new CleanWebpackPlugin([
+        'demo/dist'
+      ]),
+    new webpack.DefinePlugin({ 
+      'process.env': { 
+        NODE_ENV: JSON.stringify("production"), 
+        PUBLIC_URL: JSON.stringify("")
+      } 
+    }),
     new HtmlWebpackPlugin({
       inject: true,
       template: path.join(__dirname, '/demo/tpl/index.html'),
     }),
-    new webpack.HotModuleReplacementPlugin(),
+    
+    //new webpack.HotModuleReplacementPlugin(),
   ],
 
   module: {

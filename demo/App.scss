@@ -1,0 +1,78 @@
+.SwiperContainer{
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+}
+.menu{
+  width:10%;
+  padding-top:10%;
+  background:pink;
+  position: fixed;
+  right: 0px;
+  z-index: 1000;
+  &:before,&:after,span{
+      content:"";
+      background:white;
+      position:absolute;
+      top:50%;
+      left:50%;
+      width:10%;
+      height:60%;
+  }
+    span{
+    transform:translate(-50%,-50%) rotate(90deg);
+    transition:opacity 1s,background 1s;
+  }
+  &:before{
+    transform:translate(-50%,-20%) rotate(-90deg);
+    transition:transform 1s,background 1s;
+  }
+  &:after{
+    transform:translate(-50%,-80%) rotate(90deg);
+    transition:transform 1s,background 1s;
+  }
+  &.close{
+    &:before,&:after,span{
+      background:red
+    }
+    span{
+      opacity:0;
+    }
+    &:before{
+      transform:translate(-50%,-50%) rotate(-135deg);
+    }
+    &:after{
+      transform:translate(-50%,-50%) rotate(-45deg);
+    }
+  }
+}
+.navigation{
+  position:fixed;
+  width: 100%;
+  right: -100%; 
+  z-index: 999;
+  background: pink;
+  transition: transform 1s ;
+  &.show{
+    transform: translateX(-100%);
+  }
+  li{
+    line-height: 3;
+    padding:0 5%;
+    &.currentPath{
+      background: red;
+      color: #fff;
+    }
+  }
+}
+.intro{
+  padding: 40px 5%;
+  ol {
+    padding:0 0 0 20px;
+  }  
+  li{
+    list-style-type: decimal;
+  }
+}

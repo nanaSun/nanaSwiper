@@ -22,12 +22,18 @@ export class Sprite extends Component {
     stop=true
     loaded=false
     animationTimeout=null
+    animating=false
+    time=0
+    endtime=0
+    animationTimer=null
     constructor(props){
         super(props)
-        console.log(props)
+        if(process.env.NODE_ENV==="development") console.log(props)
         //初始化
+        
         this.canvasWidth=props.width*2
         this.canvasHeight=props.height*2
+        this.speed=props.data.speed||1
         this.image.src=props.data.spriteImg
         this.loadImagePromise=this.loadImg()
         
@@ -39,11 +45,12 @@ export class Sprite extends Component {
                 //获取绘图环境
                 this.refs=refs
                 this.context=refs.getContext("2d")
-                console.log(refs)
+                if(process.env.NODE_ENV==="development")  console.log(refs)
             }
         }
     }
-    shouldComponentUpdate(props){//当幻灯片疯狂滑动的时候，停止滑动
+    shouldComponentUpdate(props){
+        console.log("shouldComponentUpdate",props.isMoving)
         if(props.isMoving!==0){
             this.stop=true
             return false
@@ -52,10 +59,13 @@ export class Sprite extends Component {
         }
     }
     componentDidUpdate(){//当幻灯片停止滑动的时候，更新组件，重新获取context
+        window.cancelAnimationFrame(this.animationTimer)//当幻灯片疯狂滑动的时候，停止滑动
         this.context=this.refs.getContext("2d")
         this.stop=false
+        this.animating=false
+        console.log("did update",this.animating)
         this.animate()
-        console.log("componentDidUpdate",this.context)
+        if(process.env.NODE_ENV==="development")  console.log("componentDidUpdate",this.context)
     }
     componentDidMount(){
         this.currentRow=0
@@ -73,30 +83,43 @@ export class Sprite extends Component {
         }
     }
     componentWillUnmount(){
-        console.log("canvas unload")
+        if(process.env.NODE_ENV==="development")  console.log("canvas unload")
         //卸载后，清除canvas
         this.stop=true
         if(this.context.clearRect) this.context.clearRect(0,0,this.canvasWidth,this.canvasHeight)
         this.image=null
     }
     animate(){
-        if(this.fps>=60){//此处控制速度
-            this.fps=0
-            let cr=this.currentRow, cc=this.currentCol;
-            if(cr===this.row){
-                this.currentRow=0
-                this.currentCol++
-            }else{
-                this.currentRow++
+        let _this=this
+        if(_this.animating) return
+        _this.animating=true;
+        animation();
+        function animation(){
+            // _this.endtime=new Date().getTime()
+            // console.log("time",_this.endtime-_this.time)
+            // _this.time=_this.endtime
+            if(_this.fps>=_this.speed){//此处控制速度
+                _this.fps=0
+                let cr=_this.currentRow, cc=_this.currentCol;
+                if(cr===_this.row){
+                    _this.currentRow=0
+                    _this.currentCol++
+                }else{
+                    _this.currentRow++
+                }
+                if(cc>_this.col){
+                    _this.currentCol=0
+                }
+                _this.drawSpirt()
             }
-            if(cc>this.col){
-                this.currentCol=0
+            _this.fps++
+            if(!_this.stop&&_this.context){
+                _this.animationTimer=window.requestAnimationFrame(animation)//如果未停止以及存在绘图环境
             }
-            this.drawSpirt()
+            else{ if(process.env.NODE_ENV==="development")  console.log(_this)}
         }
-        this.fps++
-        if(!this.stop&&this.context) window.requestAnimationFrame(this.animate.bind(this))//如果未停止以及存在绘图环境
-        else{ console.log(this)}
+       
+        
     }
     drawSpirt(){
         if(this.stop) return
