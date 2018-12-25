@@ -15,6 +15,7 @@ start a webpack server
  `node .\webpackDevServer.js`
 
 This Swiper's config:
+
 |参数名字|作用|默认|
 | ------------- |:-------------:| -----:|
 |tplOpts|用于模板的额外参数，不影响swiper的参数|{}|
