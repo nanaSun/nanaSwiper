@@ -65,6 +65,7 @@ export function SliderSpriteTemplate(props){
 ```
 
 Sprite支持的参数
+
 |参数名|用途|默认值|
 |:--:|:--:|:--:|
 |width|必须，自定义|""|
