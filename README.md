@@ -16,7 +16,7 @@ start a webpack server
 
 This Swiper's config:
 |参数名字|作用|默认|
-|:--:|:--:|:--:|
+| ------------- |:-------------:| -----:|
 |tplOpts|用于模板的额外参数，不影响swiper的参数|{}|
 |slideType|暂时只设置了flatCoverFlow这个特效|""|
 |customStyleClassName|用户自定义swiper的类名,e.g: "Sprite"是最外层的wrapper slider 就是"SpriteSlider" 当前就是"SpriteActive"|""|
