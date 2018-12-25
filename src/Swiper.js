@@ -10,8 +10,8 @@ class Swiper extends Component{
     endPoint=0//结束的点touchend
     moveingStart=false//判断是否开始touchstart
     isMoving=0//起始滑动为0
-    swiperWidth="100%"//幻灯片的宽度
-    swiperHeight="100%"//幻灯片的高度
+    swiperWidth=0//幻灯片的宽度
+    swiperHeight=0//幻灯片的高度
     initMovex=0//幻灯片开始的位置
     currentSliderIndex=0//初始幻灯片
     sensitive=0.5//灵明度
@@ -19,13 +19,17 @@ class Swiper extends Component{
     isLoop=false
     slideType=""
     customStyleClassName=""
+    customNavStyleClassName=""
     sliders=[]
     bounds={}
     boundsMove={}
+    tplOpts={}
     constructor(props){
         super(props)
+        this.tplOpts=props.tplOpts||this.tplOpts
         this.slideType=props.slideType||this.slideType;
         this.customStyleClassName=props.customStyleClassName||this.customStyleClassName;
+        this.customNavStyleClassName=props.customNavStyleClassName||this.customNavStyleClassName;
         this.isFreeMode=props.isFreeMode||this.isFreeMode;
         this.sensitive=props.sensitive||this.sensitive;
         this.initMovex=props.initMovex||this.initMovex;
@@ -35,9 +39,9 @@ class Swiper extends Component{
         this.swiper=(refs)=>{
             if(process.env.NODE_ENV==="development") console.log(process.env.NODE_ENV,refs,this.initMovex)
             if(refs){
-                this.initMovex=this.initMovex*refs.offsetWidth
-                this.swiperWidth=refs.offsetWidth-this.initMovex*2
-                this.swiperHeight=refs.offsetHeight
+                this.initMovex=this.initMovex<1?this.initMovex*refs.offsetWidth:this.initMovex
+                this.swiperWidth=this.props.width||(refs.offsetWidth-this.initMovex*2)
+                this.swiperHeight=this.props.height||refs.offsetHeight
             }
         }
         this.init()    
@@ -61,7 +65,7 @@ class Swiper extends Component{
         }else{
             this.bounds={
                 min:0,
-                max:2
+                max:this.sliders.length-1
             }
         }
         
@@ -80,8 +84,9 @@ class Swiper extends Component{
         return supportTouch?e.touches[0].clientX:e.clientX
     }
     touchstart(e){
+        if(process.env.NODE_ENV==="development") console.log("touchstart",e.type)
         if((e.type==="mousedown"&&!supportTouch)||(e.type==="touchstart"&&supportTouch)){
-            e.preventDefault();
+            //e.preventDefault();
             this.startPoint=this.getPointX(e)
             this.movePoint=this.startPoint
             this.endPoint=this.startPoint
@@ -89,7 +94,7 @@ class Swiper extends Component{
         }
     }
     touchmove(e){
-        if(process.env.NODE_ENV==="development") console.log(supportTouch,e.type)
+        if(process.env.NODE_ENV==="development") console.log("touchmove",e.type)
         if(this.moveingStart&&((e.type==="mousemove"&&!supportTouch)||(e.type==="touchmove"&&supportTouch))){
             e.preventDefault();
             this.endPoint=this.getPointX(e)
@@ -104,10 +109,11 @@ class Swiper extends Component{
         }
     }
     touchend(e){
+        if(process.env.NODE_ENV==="development") console.log("touchend",e.type)
         if(((e.type==="mouseleave"||e.type==="mouseup")&&!supportTouch)||(e.type==="touchend"&&supportTouch)){
-            e.preventDefault()
             this.moveingStart=false;
             if(this.startPoint!==this.endPoint){
+                e.preventDefault()
                 this.slideTo(this.calculateSlider())
             }else{
                 this.isMoving=0
@@ -181,18 +187,23 @@ class Swiper extends Component{
         height={this.swiperHeight} 
         data={item} 
         isMoving={this.isMoving}
+        tplOpts={this.tplOpts}
         isActive={this.currentSliderIndex===index}/>
     }
     render(){
-        let {moveX,isTransition}=this.state
-        let transitionDuration=isTransition?"300ms":"0ms",
-            transformX=`translate3d(${moveX}px, 0px, 0px)`;
-        let csc=this.customStyleClassName
+        if(this.sliders.length<1){
+            return <div></div>
+        }
+        let {moveX,isTransition}=this.state,
+            transitionDuration=isTransition?"300ms":"0ms",
+            transformX=`translate3d(${moveX}px, 0px, 0px)`,
+            csc=this.customStyleClassName,
+            cnsc=this.customNavStyleClassName
         return (<Fragment>
             {/* 滑动主体 */}
             <div
                 ref={this.swiper}
-                className={`${SwiperCSS.SwiperWrapper} ${SwiperCSS[this.slideType]} ${csc}`}
+                className={`${SwiperCSS.SwiperWrapper} ${SwiperCSS[this.slideType]?SwiperCSS[this.slideType]:""} ${csc}`}
                 onTouchStart={(e)=>{this.touchstart(e)}}
                 onTouchMove={(e)=>{this.touchmove(e)}}
                 onTouchEnd={(e)=>{this.touchend(e)}}
@@ -206,7 +217,7 @@ class Swiper extends Component{
                     transitionDuration:transitionDuration,
                     WebkitTransform:transformX,
                     transform:transformX,
-                    height:this.swiperHeight
+                    height:this.swiperHeight?this.swiperHeight:"auto"
                 }}
             >
             {this.sliders.map((item,index)=><div 
@@ -217,10 +228,10 @@ class Swiper extends Component{
             </div>)}
             </div>
             {/* 导航点 */}
-            <div className={SwiperCSS.SwiperSliderNav} >
+            <div className={`${SwiperCSS.SwiperSliderNav} ${cnsc?cnsc:""}`} >
                 {this.sliders.map((color,index)=>
-                <Fragment>{this.isLoop&&(index===0||index===this.bounds.max)?"":
-                <div className={`${SwiperCSS.SwiperItemNav} ${this.currentSliderIndex===index?SwiperCSS.SwiperNavActive:""}`}
+                <Fragment key={`${cnsc}_${index}`}>{this.isLoop&&(index===0||index===this.bounds.max)?"":
+                <div className={`${SwiperCSS.SwiperItemNav} ${cnsc?cnsc+"Item":""} ${this.currentSliderIndex===index?SwiperCSS.SwiperNavActive+` ${cnsc?cnsc+"Active":""}`:""}`}
                 onClickCapture={()=>{this.clickSlideTo(index)}} 
                 ></div>}
                 </Fragment>

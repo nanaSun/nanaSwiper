@@ -9,6 +9,7 @@ export function UserDefineSlider(props){
    return (<div className="SwiperContainer">
     <Swiper 
         customStyleClassName="nanaDesign"
+        customNavStyleClassName="navigationUser"
         sensitive={.2} 
         isLoop={false}
         data={[

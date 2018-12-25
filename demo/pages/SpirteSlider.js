@@ -2,6 +2,7 @@ import React from 'react';
 
 import {Swiper} from '../../src/index'
 import {SliderSpriteTemplate} from '../template/SliderSpriteTemplate'
+import {SliderDefaultTemplate} from  '../template/SliderDefaultTemplate'
 import img1 from "../images/test1.jpg"
 import img1Bkg from "../images/test1_bkg.jpg"
 import img2 from "../images/test2.jpg"
@@ -14,7 +15,7 @@ export function SpirteSlider(props){
     <Swiper 
         sensitive={.2} 
         isLoop={true}
-        data={[
+        data={[//自行定义，这边只是例子
         {
             tpl:SliderSpriteTemplate,
             spriteImg:img1,
@@ -22,11 +23,8 @@ export function SpirteSlider(props){
             speed:1,
             img:img1Bkg
         },{
-            //tpl:SliderSpriteTemplate,
-            spriteImg:img2,
-            spriteConf:[3,1,222,350],
-            speed:10,
-            img:img2Bkg
+            tpl:SliderDefaultTemplate,
+            id:"mixed 模板"
         },{
             tpl:SliderSpriteTemplate,
             spriteImg:img3,

@@ -99,6 +99,7 @@ class App extends Component {
             <li>支持序列帧</li>
             <li>无限轮播图</li>
           </ol>
+          <p><a href="https://github.com/nanaSun/nanaSwiper">github地址</a></p>
         </div>
       </div>
        

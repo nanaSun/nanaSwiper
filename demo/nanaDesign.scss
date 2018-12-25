@@ -11,3 +11,22 @@
         height: 100%;
     }
 }
+.navigationUser {
+    width: 100%;
+    padding: 10px 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 10;
+    .navigationUserItem{
+        width: 10px;
+        height: 10px;
+        border-radius: 10px;
+        overflow: hidden;
+        background: pink;
+        flex-shrink: 0;
+        margin:0 10px;
+        &.navigationUserActive{
+            width: 20px;
+            background: plum;
+        }
+    }
+}
