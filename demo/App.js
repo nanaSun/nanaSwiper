@@ -94,6 +94,7 @@ class App extends Component {
           <ol>
             <li>可以滑动</li>
             <li>可以自动滑动到下一页</li>
+            
             <li>可以自定义模板</li>
             <li>设置灵敏度</li>
             <li>支持序列帧</li>

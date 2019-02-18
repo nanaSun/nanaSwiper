@@ -1,5 +1,5 @@
 import React,{Fragment} from  'react'
-import {Sprite} from  '../../src/index'
+import {Sprite} from  '../../index'
 export function SliderSpriteTemplate(props){
     if(process.env.NODE_ENV==="development")  console.log(props)
     return (

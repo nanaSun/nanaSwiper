@@ -1,10 +1,11 @@
 import React from 'react';
 
-import {Swiper} from '../../src/index'
+import Swiper from '../../index'
 import {SliderDefaultTemplate} from '../template/SliderDefaultTemplate'
 import img1Bkg from "../images/test1_bkg.jpg"
 import img2Bkg from "../images/test2_bkg.jpg"
 import img3Bkg from "../images/test3_bkg.jpg"
+
 export function CoverFlowSlider(props){
    return (<div className="SwiperContainer">
     <Swiper 
@@ -12,6 +13,8 @@ export function CoverFlowSlider(props){
         initMovex={.1}//space between
         sensitive={.2} 
         isLoop={true}
+        width={window.innerWidth}
+        height={300}
         data={[
         {
             id:"1",

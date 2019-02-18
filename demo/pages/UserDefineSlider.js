@@ -1,6 +1,6 @@
 import React from 'react';
 import '../nanaDesign.scss'
-import {Swiper} from '../../src/index'
+import Swiper from '../../index'
 import {SliderUserTemplate} from '../template/SliderUserTemplate'
 import img1Bkg from "../images/test1_bkg.jpg"
 import img2Bkg from "../images/test2_bkg.jpg"

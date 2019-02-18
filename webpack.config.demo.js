@@ -3,13 +3,6 @@ const webpack = require('webpack');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
-const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
-const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
-const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
-const getCacheIdentifier = require('react-dev-utils/getCacheIdentifier');
-
-
 // style files regexes
 const cssRegex = /\.css$/;
 const cssModuleRegex = /\.module\.css$/;
@@ -56,7 +49,7 @@ const config = {
   context: __dirname,
   mode: 'development',
   entry: [
-    require.resolve('react-dev-utils/webpackHotDevClient'),
+    require.resolve('webpack-hot-middleware/client') + '?path=/__what&timeout=2000&overlay=false',
     path.join(__dirname, 'demo/index.js')
   ],
   output: {
@@ -81,7 +74,6 @@ const config = {
     }),
     new webpack.HotModuleReplacementPlugin(),
   ],
-
   module: {
     rules: [
       {

@@ -54,7 +54,7 @@ const config = {
     filename: 'index.js',
     libraryTarget: "umd",
     library: "Swiper",
-    //umdNamedDefine: true
+    umdNamedDefine: true
   },
   resolve: {
     extensions: ['.js', '.jsx']
@@ -67,7 +67,10 @@ const config = {
       } 
     }),
   ],
-
+  externals: {  
+    "react": 'react',    
+    'react-dom': 'ReactDOM'
+  },
   module: {
     rules: [
       {

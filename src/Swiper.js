@@ -40,6 +40,7 @@ class Swiper extends Component{
             if(process.env.NODE_ENV==="development") console.log(process.env.NODE_ENV,refs,this.initMovex)
             if(refs){
                 this.initMovex=this.initMovex<1?this.initMovex*refs.offsetWidth:this.initMovex
+                console.log(this.initMovex);
                 this.swiperWidth=this.props.width||(refs.offsetWidth-this.initMovex*2)
                 this.swiperHeight=this.props.height||refs.offsetHeight
             }
@@ -217,7 +218,7 @@ class Swiper extends Component{
                     transitionDuration:transitionDuration,
                     WebkitTransform:transformX,
                     transform:transformX,
-                    height:this.swiperHeight?this.swiperHeight:"auto"
+                    height:this.swiperHeight
                 }}
             >
             {this.sliders.map((item,index)=><div 
