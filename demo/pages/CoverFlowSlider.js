@@ -5,16 +5,18 @@ import {SliderDefaultTemplate} from '../template/SliderDefaultTemplate'
 import img1Bkg from "../images/test1_bkg.jpg"
 import img2Bkg from "../images/test2_bkg.jpg"
 import img3Bkg from "../images/test3_bkg.jpg"
-
+const width=window.innerWidth*.8-20
+const initMovex=window.innerWidth*.1
 export function CoverFlowSlider(props){
+   
    return (<div className="SwiperContainer">
     <Swiper 
         slideType={"flatCoverFlow"}
-        initMovex={.1}//space between
+        initMovex={initMovex}//space between
         sensitive={.2} 
         isLoop={true}
-        width={window.innerWidth}
-        height={300}
+        width={width}//take care 这边需要手动计算margin的宽度
+        height={280}
         data={[
         {
             id:"1",

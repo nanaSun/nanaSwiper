@@ -23,7 +23,7 @@ export function SpirteSlider(props){
             tpl:SliderSpriteTemplate,
             spriteImg:img1,
             spriteConf:[3,1,222,350],
-            speed:1,
+            speed:6,
             img:img1Bkg
         },{
             tpl:SliderDefaultTemplate,
