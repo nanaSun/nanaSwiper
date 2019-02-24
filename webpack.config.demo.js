@@ -57,11 +57,17 @@ const config = {
   module: {
     rules: [
       {
+        enforce: "pre",
+        test: /\.(js|mjs|jsx)$/,
+        exclude: /node_modules/,
+        loader: "eslint-loader"
+      },
+      {
         oneOf: [
           {
             test: /\.(js|mjs|jsx)$/,
             exclude: /node_modules/,
-            loader: 'babel-loader'
+            loader: ['babel-loader','eslint-loader']
           },
           {
             test: cssRegex,

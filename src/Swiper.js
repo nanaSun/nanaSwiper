@@ -36,15 +36,9 @@ class Swiper extends Component{
         this.sliders=props.data
         this.isLoop=(this.sliders.length>1?props.isLoop:false)||this.isLoop
         this.currentSliderIndex=props.initSliderIndex||0
-        this.swiper=(refs)=>{
-            if(process.env.NODE_ENV==="development") console.log(process.env.NODE_ENV,refs,this.initMovex)
-            if(refs){
-                this.initMovex=this.initMovex<1?this.initMovex*refs.offsetWidth:this.initMovex
-                console.log(this.initMovex);
-                this.swiperWidth=this.props.width||(refs.offsetWidth-this.initMovex*2)
-                this.swiperHeight=this.props.height||refs.offsetHeight
-            }
-        }
+        this.initMovex=this.initMovex<1?this.initMovex*this.props.width:this.initMovex
+        this.swiperWidth=this.props.width
+        this.swiperHeight=this.props.height
         this.init()    
         this.state={
             moveX:this.initMovex+this.currentSliderIndex*this.swiperWidth,
@@ -57,7 +51,6 @@ class Swiper extends Component{
     init(){
         if(this.isLoop){
             this.sliders=[this.sliders.slice(-1)[0],...this.sliders,this.sliders.slice(0,1)[0]]
-            if(process.env.NODE_ENV==="development") console.log(this.sliders)
             this.bounds={
                 min:1,
                 max:this.sliders.length-1
@@ -85,7 +78,7 @@ class Swiper extends Component{
         return supportTouch?e.touches[0].clientX:e.clientX
     }
     touchstart(e){
-        if(process.env.NODE_ENV==="development") console.log("touchstart",e.type)
+        //console.log(e.type,supportTouch)
         if((e.type==="mousedown"&&!supportTouch)||(e.type==="touchstart"&&supportTouch)){
             //e.preventDefault();
             this.startPoint=this.getPointX(e)
@@ -95,7 +88,6 @@ class Swiper extends Component{
         }
     }
     touchmove(e){
-        if(process.env.NODE_ENV==="development") console.log("touchmove",e.type)
         if(this.moveingStart&&((e.type==="mousemove"&&!supportTouch)||(e.type==="touchmove"&&supportTouch))){
             e.preventDefault();
             this.endPoint=this.getPointX(e)
@@ -103,6 +95,7 @@ class Swiper extends Component{
             this.movePoint=this.endPoint
             this.isMoving=this.movePoint-this.startPoint>0?-1:1
             //mark这边触发渲染
+            //console.log("touchmove",changePos)
             this.setState({
                 isTransition:false,
                 moveX:changePos
@@ -110,7 +103,7 @@ class Swiper extends Component{
         }
     }
     touchend(e){
-        if(process.env.NODE_ENV==="development") console.log("touchend",e.type)
+        //console.log("touchend",e.type)
         if(((e.type==="mouseleave"||e.type==="mouseup")&&!supportTouch)||(e.type==="touchend"&&supportTouch)){
             this.moveingStart=false;
             if(this.startPoint!==this.endPoint){
@@ -132,7 +125,7 @@ class Swiper extends Component{
         }else if(this.isMoving===-1&&difference<-this.sensitive){//向左边
             slideIndex=Math.floor(MoveSlider)
         }
-        console.log("calculateSlider",MoveSlider)
+        console.log("calculateSlider",this.state.moveX,this.swiperWidth,MoveSlider)
         slideIndex=slideIndex<min?0:slideIndex>max?max:slideIndex
         return slideIndex
     }
@@ -159,7 +152,7 @@ class Swiper extends Component{
         if(this.moveingStart||this.isMoving===0) return
         let {min,max}=this.boundsMove
         this.currentSliderIndex=slideIndex
-        console.log("isFreeMode",slideIndex,this.state.moveX,min,max)
+        //console.log("isFreeMode",slideIndex,this.state.moveX,min,max)
         if(force||!this.isFreeMode||(this.state.moveX<min||this.state.moveX>max)){
             this.setState({
                 isTransition:true,
