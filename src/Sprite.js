@@ -39,7 +39,8 @@ export class Sprite extends Component {
         
         if(this.props.data.spriteConf&&this.props.data.spriteConf.length===4) 
             [this.row,this.col,this.fpsWidth,this.fpsHeight]=this.props.data.spriteConf
-
+        
+        //this.canvas=React.createRef()
         this.canvas=(refs)=>{
             if(refs) {
                 //获取绘图环境

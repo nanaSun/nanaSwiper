@@ -125,7 +125,6 @@ class Swiper extends Component{
         }else if(this.isMoving===-1&&difference<-this.sensitive){//向左边
             slideIndex=Math.floor(MoveSlider)
         }
-        console.log("calculateSlider",this.state.moveX,this.swiperWidth,MoveSlider)
         slideIndex=slideIndex<min?0:slideIndex>max?max:slideIndex
         return slideIndex
     }

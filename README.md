@@ -4,11 +4,12 @@ It's a slider that only supports horizonal slide. Just for now，I'll develop ve
 
 The reason why develop such a swiper,just because a project need sliders with sprit and react. And it's hard to find a 3rd plugin which support for slider,react and canvas. It's easy to find a lot of plugins that support canvas and react or react and slider. That's why I develop such a plugin.
 
-You can check my demo on [my website](https://www.cherryvenus.com/slider/)
+You can check my demo on [https://www.cherryvenus.com/slider/](https://www.cherryvenus.com/slider/)
 
 If you want to play with this project, you can clone the repositor and then use following directions to start the project.
 
-play with demo
+build demo
+
 `npx webpack --config webpack.config.demo`
 
 start a webpack server
@@ -73,6 +74,12 @@ Sprite支持的参数
 |data.speed|速度，默认1秒60帧，如果设置2，就是2秒60帧|1|
 |data.spriteImg|必须，序列帧参数，帧图|""|
 |data.spriteConf|帧参数包含（row行,col列,fpsWidth：1帧图宽,fpsHeight：1帧图高）|{}|
+
+test方式，所用的test是jest
+
+```
+ npx jest --config .\.jest.js -u
+```
 
 感觉自己做的好复杂，溜了溜了
 
