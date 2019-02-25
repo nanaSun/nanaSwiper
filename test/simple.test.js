@@ -68,11 +68,10 @@ loopComponent.componment=(<Swiper
     data={data}/>)
 describe('Swiper loop test', () => {
     const loopPoints=[
-        [[winwidth*.5,0],[winwidth*.29,0],[winwidth*.29,0],2,"sensitive bigger then .2 and move left slider come to next1"],//偏差大于.2，向左
-        [[winwidth*.5,0],[winwidth*.2,0],[winwidth*.2,0],3,"sensitive bigger then .2 and move left slider come to last"],//偏差小于.2，向右
-        [[winwidth*.5,0],[winwidth*.1,0],[winwidth*.1,0],1,"sensitive bigger then .2 and move right slider come to first"],//偏差小于.2，向右，loop至第一个
-        [[winwidth*.5,0],[winwidth*.1,0],[winwidth*.1,0],2,"sensitive bigger then .2 and move right slider come to next2"],//偏差小于.2，向右，loop至第一个
-        [[winwidth*.5,0],[winwidth*.1,0],[winwidth*.9,0],3,"sensitive less then .2 and move left slider come  back to last"]//偏差大于.2，向左
+        [[winwidth*.5,0],[winwidth*.29,0],[winwidth*.29,0],2,"sensitive bigger then .2 and move left slider come to next"],//偏差大于.2，向左
+        [[winwidth*.5,0],[winwidth*.2,0],[winwidth*.2,0],3,"sensitive bigger then .2 and move left slider come to last"],//偏差小于.2，向左
+        [[winwidth*.5,0],[winwidth*.1,0],[winwidth*.1,0],1,"sensitive bigger then .2 and move right slider come to first"],//偏差小于.2，向左，loop至第一个
+        [[winwidth*.5,0],[winwidth*.9,0],[winwidth*.9,0],3,"sensitive bigger then .2 and move right slider come to last"],//偏差小于.2，向右，返回最后一个
     ]
     const tree=mount(loopComponent.componment)
     const c = tree.instance()
