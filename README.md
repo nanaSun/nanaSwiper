@@ -64,6 +64,7 @@ Here follow react-router's style, so you can design your slider by `render`
 here `props` params passed to `render` has following important function:
 
 |params|usage|
+|:--:|:--:|
 |isMoving|whether the swiper is moving,touchmove -1 for left and 1 for right|
 |isActive|whether it's current slider|
 
