@@ -17,7 +17,7 @@ build demo
 `npx webpack --config webpack.config.demo`
 
 start a webpack server
- `node .\webpackDevServer.js`
+ `npm start`
 
 This Swiper's config:
 
@@ -153,11 +153,56 @@ Sprite support params:
 |data.spriteConf|sprite's config（row num,col num,fpsWidth：width,fpsHeight：height）|{}|yes|
 |data.speed|speed，default 60fps, if set 2 it's 30fps|1|no|
 
+Browser version, you can get it from ` npm run-script broswer`, and then `dist/nanaSwiper.js` is there for you.
+
+How to use? You can directly use it in browser.
+
+```
+    <script src="https://cdn.bootcss.com/react/16.8.1/umd/react.profiling.min.js"></script>
+    <script src="https://cdn.bootcss.com/react-dom/16.8.1/umd/react-dom.profiling.min.js"></script>
+    <script src="./nanaSwiper.js"></script>
+    <script>
+        const  slider=React.createElement(
+            "div",
+            {className:"defaultSlider"},
+            `slider`
+        )
+        const tpl1=React.createElement(
+            Swiper.SwiperSlider,
+            {
+                className:"defaultSlider",
+                render:()=>slider
+            }
+        )
+        let test=React.createElement(
+            Swiper.default,
+            {
+                sensitive:.2,
+                isLoop:true,
+                width:window.innerWidth,
+                height:300,
+            },
+            tpl1,
+            tpl1,
+            tpl1
+        )
+        let div=React.createElement(
+            "div",
+            {
+                className:"SwiperContainer"
+            },
+            test
+        )
+        ReactDOM.render(div, document.getElementById('root'));
+    </script>
+```
+
+
 
 About test, here simulate the touch action, and only test the whether slider is right.
 
 ```
- npx jest --config .\.jest.js -u
+npm test
 ```
 .
 

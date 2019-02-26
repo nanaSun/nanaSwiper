@@ -2,6 +2,11 @@
   "name": "nanaswiper",
   "version": "0.1.4",
   "private": false,
+  "scripts": {
+    "test": "jest --config .jest.js",
+    "start": "node ./webpackDevServer.js",
+    "broswer":"webpack --config ./webpack.config.bundle.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nanaSun/nanaSwiper.git"

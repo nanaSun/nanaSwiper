@@ -26,13 +26,25 @@
     <script src="./nanaSwiper.js"></script>
     <script>
         //Swiper.Spirt
-        const tpl=function(props){
-            return React.createElement(
-                "div",
-                {className:"defaultSlider"},
-                `slider-${props.data.id}`
-            )
-        }
+        const  slider=React.createElement(
+            "div",
+            {className:"defaultSlider"},
+            `slider`
+        )
+        const tpl1=React.createElement(
+            Swiper.SwiperSlider,
+            {
+                className:"defaultSlider",
+                render:()=>slider
+            }
+        )
+        const tpl2=React.createElement(
+            Swiper.SwiperSlider,
+            {
+                className:"defaultSlider",
+                render:()=>slider
+            }
+        )
         let test=React.createElement(
             Swiper.default,
             {
@@ -40,21 +52,11 @@
                 isLoop:true,
                 width:window.innerWidth,
                 height:300,
-                data:[
-                        {
-                            tpl:tpl,
-                            id:"mixed 模板1"
-                        },
-                        {
-                            tpl:tpl,
-                            id:"mixed 模板2"
-                        },
-                        {
-                            tpl:tpl,
-                            id:"mixed 模板3"
-                        }
-                ]
-            }
+            },
+            tpl1,
+            tpl2,
+            tpl1,
+            tpl2
         )
         let div=React.createElement(
             "div",

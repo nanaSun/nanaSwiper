@@ -95,11 +95,11 @@ class Swiper extends Component{
             e.preventDefault();
             this.endPoint=this.getPointX(e)
             let changePos=this.endPoint-this.movePoint+this.state.moveX;
-            console.log(this.endPoint,this.movePoint,this.state.moveX)
+            //console.log(this.endPoint,this.movePoint,this.state.moveX)
             this.movePoint=this.endPoint
             this.isMoving=this.movePoint-this.startPoint>0?-1:1
             //mark这边触发渲染
-            console.log("touchmove",changePos)
+            //console.log("touchmove",changePos)
             this.setState({
                 isTransition:false,
                 moveX:changePos
