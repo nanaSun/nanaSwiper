@@ -39,7 +39,7 @@ const navs=[
 ]
 function PathNav(props){
   return <ul className={`navigation ${props.isShow?"show":""}`}>
-    {navs.map((nav)=><li className={props.currentPath===nav.path?"currentPath":""}><Link to={nav.path}>{nav.name}</Link></li>)}
+    {navs.map((nav,index)=><li key={`nav${index}`} className={props.currentPath===nav.path?"currentPath":""}><Link to={nav.path}>{nav.name}</Link></li>)}
   </ul>
 }
 class App extends Component {

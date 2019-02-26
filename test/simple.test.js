@@ -1,12 +1,26 @@
 import React from 'react';
-import Swiper from '../src/Swiper';
+import Swiper,{SwiperSlider} from '../index';
+import {SliderDefaultTemplate} from '../demo/template/SliderDefaultTemplate'
 //import TestRenderer from 'react-test-renderer';
 import touch from './touchHelper';
 import Adapter from 'enzyme-adapter-react-16';
 import { configure, shallow, mount, render } from 'enzyme';
 configure({ adapter: new Adapter() });
 const winwidth=window.innerWidth;
-const data=[{id:"1"},{id:"2"},{id:"3"}]
+const data=[
+    {
+        text:"text1",
+        tpl:SliderDefaultTemplate
+    },
+    {
+        text:"text2",
+        tpl:SliderDefaultTemplate
+    },
+    {
+        text:"text3",
+        tpl:SliderDefaultTemplate
+    }
+]
 //没有做y上的处理，所以这里全部为0，并不影响结果
 /**
  * 宽度是整屏宽
@@ -18,12 +32,15 @@ const baseComponent = {
     sensitive:.2,
     componment:null
 };
-baseComponent.componment=(<Swiper 
+baseComponent.componment=(<Swiper
     sensitive={baseComponent.sensitive} 
     isLoop={false}
     width={baseComponent.width}
-    height={300}
-    data={data}/>)
+    height={300}>
+        {data.map((d,index)=>{
+            return <SwiperSlider key={`SpirteSlider${index}`} render={()=><d.tpl {...d}/>}/>
+        })}
+    </Swiper>)
 
 describe('Swiper simple test', () => {
     const touchPoints=[
@@ -59,13 +76,15 @@ const loopComponent={
     sensitive:.2,
     componment:null
 };
-loopComponent.componment=(<Swiper 
-    slideType={"flatCoverFlow"}
+loopComponent.componment=(<Swiper
     sensitive={loopComponent.sensitive} 
     isLoop={true}
     width={loopComponent.width}
-    height={280}
-    data={data}/>)
+    height={300}>
+        {data.map((d,index)=>{
+            return <SwiperSlider key={`SpirteSlider${index}`} render={()=><d.tpl {...d}/>}/>
+        })}
+    </Swiper>)
 describe('Swiper loop test', () => {
     const loopPoints=[
         [[winwidth*.5,0],[winwidth*.29,0],[winwidth*.29,0],2,"sensitive bigger then .2 and move left slider come to next"],//偏差大于.2，向左

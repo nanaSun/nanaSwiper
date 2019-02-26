@@ -1,32 +1,28 @@
-import React from 'react';
+import React,{Fragment} from 'react';
 
-import Swiper from '../../index'
-import {SliderDefaultTemplate} from '../template/SliderDefaultTemplate'
-import img1Bkg from "../images/test1_bkg.jpg"
-import img2Bkg from "../images/test2_bkg.jpg"
-import img3Bkg from "../images/test3_bkg.jpg"
-export function FreeModeSlider(props){
-   return (<div className="SwiperContainer">
-    <Swiper 
-        sensitive={.2} 
-        isFreeMode={true}
-        isLoop={false}
-        width={window.innerWidth}
-        height={300}
-        data={[
-        {
-            id:"1",
-            tpl:SliderDefaultTemplate,
-            img:img1Bkg
-        },{
-            id:"2",
-            tpl:SliderDefaultTemplate,
-            img:img2Bkg
-        },{
-            id:"3",
-            tpl:SliderDefaultTemplate,
-            img:img3Bkg
-        }
-        ]}/>
-    </div>)
+import Swiper,{SwiperSlider} from '../../index'
+
+export function FreeModeSlider(){
+   return (
+       <Fragment>
+           <div className="SwiperContainer">
+                <Swiper
+                    sensitive={.2} 
+                    isLoop={false}
+                    isFreeMode={true}
+                    width={window.innerWidth}
+                    height={300}>
+                        <SwiperSlider  render={()=>(<div className="userDefaultSlider1">
+                            slider-ahahah
+                            </div>)}/>
+                        <SwiperSlider render={()=>(<div className="userDefaultSlider2">
+                            slider-gasdffds
+                            </div>)}/>
+                        <SwiperSlider render={()=>(<div className="userDefaultSlider3">
+                            slider-werqwerq
+                        </div>)}/>
+                </Swiper>
+            </div>
+        </Fragment>
+    )
 }

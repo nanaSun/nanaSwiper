@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import PropTypes from "prop-types";
 export class Sprite extends Component {
     //canvas的宽高
     canvasWidth=0
@@ -33,12 +33,12 @@ export class Sprite extends Component {
         
         this.canvasWidth=props.width*2
         this.canvasHeight=props.height*2
-        this.speed=props.data.speed||1
-        this.image.src=props.data.spriteImg
+        this.speed=props.speed||1
+        this.image.src=props.spriteImg
         this.loadImagePromise=this.loadImg()
         
-        if(this.props.data.spriteConf&&this.props.data.spriteConf.length===4) 
-            [this.row,this.col,this.fpsWidth,this.fpsHeight]=this.props.data.spriteConf
+        if(this.props.spriteConf&&this.props.spriteConf.length===4) 
+            [this.row,this.col,this.fpsWidth,this.fpsHeight]=this.props.spriteConf
         
         //this.canvas=React.createRef()
         this.canvas=(refs)=>{
@@ -138,4 +138,11 @@ export class Sprite extends Component {
         return <canvas width={this.canvasWidth} height={this.canvasHeight} style={{width:width,height:height}} ref={this.canvas}></canvas>
     }
 }
+Sprite.propTypes = {
+    width:PropTypes.number.isRequired,
+    height:PropTypes.number.isRequired,
+    speed:PropTypes.number,
+    spriteImg:PropTypes.string.isRequired,
+    spriteConf:PropTypes.node.isRequired
+};
 export default Sprite

@@ -1,5 +1,9 @@
 # Nana's Swiper
 
+Major change:
+    
+    Change how to set slider, less configuration and makes it like react-router's style
+
 It's a slider that only supports horizonal slide. Just for now，I'll develop vertical slide in the next version.
 
 The reason why develop such a swiper,just because a project need sliders with sprit and react. And it's hard to find a 3rd plugin which support for slider,react and canvas. It's easy to find a lot of plugins that support canvas and react or react and slider. That's why I develop such a plugin.
@@ -17,69 +21,145 @@ start a webpack server
 
 This Swiper's config:
 
-|参数名字|作用|默认|
-| ------------- |:-------------:| -----:|
-|tplOpts|用于模板的额外参数，不影响swiper的参数|{}|
-|slideType|暂时只设置了flatCoverFlow这个特效|""|
-|customStyleClassName|用户自定义swiper的类名,e.g: "Sprite"是最外层的wrapper slider 就是"SpriteSlider" 当前就是"SpriteActive"|""|
-|customNavStyleClassName|用户自定义导航的类名 ,e.g: "Nav"是最外层的导航 导航点就是"NavItem" 当前就是"NavActive"|""|
-|isFreeMode|是否自由模式，不支持loop|false|
-|sensitive|滑动灵敏度，0.2就是划过20%的slider，就会进入下一张或上一张|0.5|
-|initMovex|用于计算，如果需要定义slider的尺寸，就需要计算这个|0|
-|sliders|sliders的数据|[]|
-|isLoop|是否循环，无限模式，1张slider和freemode下不支持loop|false|
-|initSliderIndex|初始定位的slider|0|
+|params|function|default|required|
+| ------------- |:-------------:| -----:| -----:|
+|children|sliders inside swiper is a must|null|yes||sensitive|how sensitive it is when move the swiper to next or prev slider|0.5|no|
+|initMovex|calculator initial slider position|0|no|
+|isLoop|whether loop. One slider or freemode does not support loop|false|no|
+|width|width|window.innerWidth|no|
+|height|height|300|no|
+|isFreeMode|is Free Mode and not support loop mode|false|no|
+|initSliderIndex|inital slider,range from 0 to slider's number minus 1|0|no|
+|slideType|`flatCoverFlow` effect，maybe remove after|""|no|
 
-如何使用
-
-安装
-`npm i -s nanaswiper`
-
-引用
-`import {Swiper} from 'nanaswiper'`
-
-使用
-```
-<Swiper 
-    sensitive={.2} 
-    isLoop={false}
-    data={[//自行定义，这边只是例子
-        {
-            id:"1",
-            tpl:SliderDefaultTemplate,//在Swiper中被引用
-            img:img1Bkg
-        }
-    ]}
-/>
+```simple usage
+import Swiper,{SwiperSlider} from 'nanaswiper'
+<div className="SwiperContainer">
+    <Swiper
+        initSliderIndex={2}
+        sensitive={.2} 
+        isLoop={true}
+        >
+            <SwiperSlider  render={()=>(<div className="defaultSlider">
+                slider-ahahah
+                </div>)}/>
+            <SwiperSlider render={()=>(<div className="defaultSlider">
+                slider-gasdffds
+                </div>)}/>
+            <SwiperSlider render={()=>(<div className="defaultSlider">
+                slider-werqwerq
+            </div>)}/>
+    </Swiper>
+</div>
 ```
 
-所有模板都需要自行定义，所以这边给出一个例子，如何使用内置的canvas序列帧插件
+Here follow react-router's style, so you can design your slider by `render`
+
+```
+<SwiperSlider  render={(props)=>(<div className="defaultSlider">
+    slider-ahahah
+</div>)}/>
+```
+
+here `props` params passed to `render` has following important function:
+
+|params|usage|
+|isMoving|whether the swiper is moving,touchmove -1 for left and 1 for right|
+|isActive|whether it's current slider|
+
+And if you want an array loop, the following example is for you:
+
+```
+const data=[
+    {
+        text:"text1"
+    },
+    {
+        text:"text2"
+    },
+    {
+        text:"text3"
+    }
+]
+//...
+<Swiper //...>
+{data.map((d,index)=>{
+    return <SwiperSlider key={`NormalSlider2${index}`} render={()=>(<div className="defaultSlider">
+    slider-{d.text}
+    </div>)}/>
+})}
+</Swiper>
+//...
+
+```
+
+Next part is how to use Sprite with Swiper
+
+First, define a sprite template.
+
 ```SliderSpriteTemplate.js
-import {Sprite} from  'nanaswiper'
-export function SliderSpriteTemplate(props){
-    return (
-        <Fragment>
-            {props.isActive?<Sprite {...props}/>:""}
-        </Fragment>
-    )
+import React,{Fragment,Component} from  'react'
+import Swiper,{SwiperSlider} from 'nanaswiper'
+
+class SliderSpriteTemplate extends Component{
+    render(){
+        return (
+            <Fragment>
+                {this.props.isActive?<Sprite {...this.props}/>:""}
+            </Fragment>
+        )
+    }
 }
+export {SliderSpriteTemplate}
+```
+Next set the sprite's params:
+
+```
+const data=[
+    {
+        width:window.innerWidth,//sprite width must
+        height:300,//sprite height must
+        spriteImg:img1,//must
+        spriteConf:[3,1,222,350],//sprite'position must
+        speed:6,//sprite'speed optional
+        tpl:SliderSpriteTemplate//you can set any template you like， it's a must for sprite
+    },
+    //...
+]
+export function SpirteSlider(){
+   return (<div className="SwiperContainer">
+    <Swiper
+        sensitive={.2} 
+        isLoop={false}
+        width={window.innerWidth}
+        height={300}>
+            {data.map((d,index)=>{
+                return <SwiperSlider key={`SpirteSlider${index}`}
+                    {/*pass all params to template*/} 
+                    render={(props)=><d.tpl {...d} {...props}/>}
+                />
+            })}
+        </Swiper>
+    </div>)
 ```
 
-Sprite支持的参数
+Sprite support params:
 
-|参数名|用途|默认值|
-|:--:|:--:|:--:|
-|width|必须，自定义|""|
-|height|必须，自定义|""|
-|data.speed|速度，默认1秒60帧，如果设置2，就是2秒60帧|1|
-|data.spriteImg|必须，序列帧参数，帧图|""|
-|data.spriteConf|帧参数包含（row行,col列,fpsWidth：1帧图宽,fpsHeight：1帧图高）|{}|
+|params|function|default|required|
+| ------------- |:-------------:| -----:| -----:|
+|width|canvas'width|""|yes|
+|height|canvas'height|""|yes|
+|data.spriteImg|image to animate|""|yes|
+|data.spriteConf|sprite's config（row num,col num,fpsWidth：width,fpsHeight：height）|{}|yes|
+|data.speed|speed，default 60fps, if set 2 it's 30fps|1|no|
 
-test方式，所用的test是jest
+
+About test, here simulate the touch action, and only test the whether slider is right.
 
 ```
  npx jest --config .\.jest.js -u
 ```
+.
 
 感觉自己做的好复杂，溜了溜了
 

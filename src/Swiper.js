@@ -1,8 +1,11 @@
 import React,{Component,Fragment} from 'react'
 import SwiperCSS from './styles/Swiper.module.scss'
+import SwiperContext from "./SwiperContext";
 import {checkTouch} from './utils'
-import DefaultTpl from './DefaultTpl'
+import PropTypes from "prop-types";
+
 const  supportTouch=checkTouch()
+
 class Swiper extends Component{
     //控制手势
     startPoint=0//开始滑动的点touchstart
@@ -18,67 +21,67 @@ class Swiper extends Component{
     isFreeMode=false
     isLoop=false
     slideType=""
-    customStyleClassName=""
-    customNavStyleClassName=""
     sliders=[]
     bounds={}
     boundsMove={}
-    tplOpts={}
     constructor(props){
         super(props)
-        this.tplOpts=props.tplOpts||this.tplOpts
         this.slideType=props.slideType||this.slideType;
-        this.customStyleClassName=props.customStyleClassName||this.customStyleClassName;
-        this.customNavStyleClassName=props.customNavStyleClassName||this.customNavStyleClassName;
         this.isFreeMode=props.isFreeMode||this.isFreeMode;
         this.sensitive=props.sensitive||this.sensitive;
-        this.initMovex=props.initMovex||this.initMovex;
-        this.sliders=props.data
+        this.sliders=props.children
         this.isLoop=(this.sliders.length>1?props.isLoop:false)||this.isLoop
         this.currentSliderIndex=props.initSliderIndex||0
-        this.initMovex=this.initMovex<1?this.initMovex*this.props.width:this.initMovex
-        this.swiperWidth=this.props.width
-        this.swiperHeight=this.props.height
-        this.init()    
+        this.initMovex=props.initMovex||this.initMovex;
+        this.initMovex=(this.initMovex<1?this.initMovex*this.props.width:this.initMovex)
+        this.swiperWidth=this.props.width||window.innerWidth
+        this.swiperHeight=this.props.height||300
+        this.init() 
         this.state={
-            moveX:this.initMovex+this.currentSliderIndex*this.swiperWidth,
+            moveX:this.initMovex-this.currentSliderIndex*this.swiperWidth,
             isMoving:0,//判断是否正在移动touchmove -1 左 1 右
             isTransition:false,
-            isLoaded:false
+            isLoaded:true
         }
         
     }
+    
     init(){
         if(this.isLoop){
-            this.sliders=[this.sliders.slice(-1)[0],...this.sliders,this.sliders.slice(0,1)[0]]
+            this.sliders=[
+                React.cloneElement(this.sliders.slice(-1)[0],{key:"SwiperFirst",index:0}),
+                ...this.sliders.map((s,i)=>{
+                    return React.cloneElement(s,
+                        {key:"Swiper"+(i+1),index:i+1})
+                }),
+                React.cloneElement(this.sliders.slice(0,1)[0],{key:"SwiperLast",index:this.sliders.length+1})]
             this.bounds={
                 min:1,
                 max:this.sliders.length-1
             }
             this.currentSliderIndex++
         }else{
+            this.sliders=this.sliders.map((s,i)=>{
+                return React.cloneElement(s,
+                    {key:"Swiper"+i,index:i})
+            })
             this.bounds={
                 min:0,
                 max:this.sliders.length-1
             }
         }
-        
-    }
-    componentDidMount(){
         this.boundsMove={
             min:-this.bounds.max*this.swiperWidth-this.initMovex,
             max:this.initMovex
         }
-        this.setState({
-            moveX: this.initMovex-this.currentSliderIndex*this.swiperWidth,
-            isLoaded:true
-        })
+        
+    }
+    componentDidMount(){
     }
     getPointX(e){
         return supportTouch?e.touches[0].clientX:e.clientX
     }
     touchstart(e){
-        //console.log(e.type,supportTouch)
         if((e.type==="mousedown"&&!supportTouch)||(e.type==="touchstart"&&supportTouch)){
             //e.preventDefault();
             this.startPoint=this.getPointX(e)
@@ -92,10 +95,11 @@ class Swiper extends Component{
             e.preventDefault();
             this.endPoint=this.getPointX(e)
             let changePos=this.endPoint-this.movePoint+this.state.moveX;
+            console.log(this.endPoint,this.movePoint,this.state.moveX)
             this.movePoint=this.endPoint
             this.isMoving=this.movePoint-this.startPoint>0?-1:1
             //mark这边触发渲染
-            //console.log("touchmove",changePos)
+            console.log("touchmove",changePos)
             this.setState({
                 isTransition:false,
                 moveX:changePos
@@ -122,8 +126,11 @@ class Swiper extends Component{
         let difference=MoveSlider-slideIndex
         if(this.isMoving===1&&difference>this.sensitive){//向右边，向左滑动
             slideIndex=Math.ceil(MoveSlider)
+            slideIndex=slideIndex-this.currentSliderIndex>1?slideIndex-1:slideIndex
         }else if(this.isMoving===-1&&difference<-this.sensitive){//向左边
             slideIndex=Math.floor(MoveSlider)
+            //fix灵敏度不高的情况下 滑动超过1slider
+            slideIndex=slideIndex-this.currentSliderIndex<-1?slideIndex+1:slideIndex
         }
         slideIndex=slideIndex<min?0:slideIndex>max?max:slideIndex
         return slideIndex
@@ -151,7 +158,6 @@ class Swiper extends Component{
         if(this.moveingStart||this.isMoving===0) return
         let {min,max}=this.boundsMove
         this.currentSliderIndex=slideIndex
-        //console.log("isFreeMode",slideIndex,this.state.moveX,min,max)
         if(force||!this.isFreeMode||(this.state.moveX<min||this.state.moveX>max)){
             this.setState({
                 isTransition:true,
@@ -172,31 +178,22 @@ class Swiper extends Component{
         })
         this.fixLoop()
     }
-    renderTpl(item,index){
-        if(!this.state.isLoaded) return ""
-        let SliderTpl=item.tpl||DefaultTpl;
-        return <SliderTpl 
-        width={this.swiperWidth} 
-        height={this.swiperHeight} 
-        data={item} 
-        isMoving={this.isMoving}
-        tplOpts={this.tplOpts}
-        isActive={this.currentSliderIndex===index}/>
-    }
     render(){
-        if(this.sliders.length<1){
+        if(this.sliders.length<1||!this.state.isLoaded){
             return <div></div>
         }
         let {moveX,isTransition}=this.state,
             transitionDuration=isTransition?"300ms":"0ms",
-            transformX=`translate3d(${moveX}px, 0px, 0px)`,
-            csc=this.customStyleClassName,
-            cnsc=this.customNavStyleClassName
+            transformX=`translate3d(${moveX}px, 0px, 0px)`
+        const props = {
+            ...this.state,
+            isMoving:this.isMoving,
+            currentSliderIndex:this.currentSliderIndex
+        };
         return (<Fragment>
             {/* 滑动主体 */}
-            <div
-                ref={this.swiper}
-                className={`${SwiperCSS.SwiperWrapper} ${SwiperCSS[this.slideType]?SwiperCSS[this.slideType]:""} ${csc}`}
+            <div 
+                className={`${SwiperCSS.SwiperWrapper} ${SwiperCSS[this.slideType]?SwiperCSS[this.slideType]:""}`}
                 onTouchStart={(e)=>{this.touchstart(e)}}
                 onTouchMove={(e)=>{this.touchmove(e)}}
                 onTouchEnd={(e)=>{this.touchend(e)}}
@@ -213,18 +210,16 @@ class Swiper extends Component{
                     height:this.swiperHeight
                 }}
             >
-            {this.sliders.map((item,index)=><div 
-                className={`${SwiperCSS.SwiperSlider} ${csc?csc+"Slider":""} ${(index===this.currentSliderIndex?SwiperCSS.SwiperActive+` ${csc?csc+"Active":""}`:"")}`}
-                style={{width:this.swiperWidth}} 
-                key={"SwiperSlider"+index}>
-                {this.renderTpl(item,index)}
-            </div>)}
+            <SwiperContext.Provider 
+                value={props} 
+                children={this.sliders || null}
+            />
             </div>
             {/* 导航点 */}
-            <div className={`${SwiperCSS.SwiperSliderNav} ${cnsc?cnsc:""}`} >
+            <div className={`${SwiperCSS.SwiperSliderNav}`} >
                 {this.sliders.map((color,index)=>
-                <Fragment key={`${cnsc}_${index}`}>{this.isLoop&&(index===0||index===this.bounds.max)?"":
-                <div className={`${SwiperCSS.SwiperItemNav} ${cnsc?cnsc+"Item":""} ${this.currentSliderIndex===index?SwiperCSS.SwiperNavActive+` ${cnsc?cnsc+"Active":""}`:""}`}
+                <Fragment key={`nav_${index}`}>{this.isLoop&&(index===0||index===this.bounds.max)?"":
+                <div className={`${SwiperCSS.SwiperItemNav} ${this.currentSliderIndex===index?SwiperCSS.SwiperNavActive:""}`}
                 onClickCapture={()=>{this.clickSlideTo(index)}} 
                 ></div>}
                 </Fragment>
@@ -234,4 +229,8 @@ class Swiper extends Component{
         )
     }
 }
+Swiper.propTypes = {
+    children: PropTypes.node.isRequired,
+};
+
 export default Swiper
