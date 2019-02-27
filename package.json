@@ -1,12 +1,13 @@
 {
   "name": "nanaswiper",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "private": false,
   "scripts": {
     "test": "jest --config .jest.js",
     "start": "node ./webpackDevServer.js",
-    "broswer":"webpack --config ./webpack.config.bundle.js"
+    "broswer": "webpack --config ./webpack.config.bundle.js"
   },
+  "module": "dist/nanaSwiper.umd.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nanaSun/nanaSwiper.git"
@@ -20,6 +21,18 @@
     "not ie <= 11",
     "not op_mini all"
   ],
+  "peerDependencies": {
+    "prop-types": "^15.7.2",
+    "react": "^16.8.1"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.2.5",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1"
+  },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",
@@ -51,8 +64,6 @@
     "postcss-flexbugs-fixes": "^4.1.0",
     "postcss-loader": "^3.0.0",
     "postcss-preset-env": "^6.5.0",
-    "react": "^16.8.1",
-    "react-dom": "^16.8.1",
     "react-test-renderer": "^16.8.3",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
@@ -63,11 +74,5 @@
     "webpack-dev-server": "^3.1.14",
     "webpack-hot-middleware": "^2.24.3",
     "webpack-umd-external": "^1.0.2"
-  },
-  "dependencies": {
-    "@babel/polyfill": "^7.2.5",
-    "prop-types": "^15.7.2",
-    "react-router": "^4.3.1",
-    "react-router-dom": "^4.3.1"
   }
 }

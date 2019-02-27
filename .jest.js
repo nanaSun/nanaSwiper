@@ -16,6 +16,21 @@ const transformIgnorePatterns = [
     transformIgnorePatterns,
     testURL: 'http://localhost',
     globals: {
-        ontouchstart: null
+        ontouchstart: null//模拟windows的touchstart
+    },
+    collectCoverage :true,
+    coverageDirectory: '<rootDir>/test/coverage', 
+    collectCoverageFrom:[
+        "**/index.{js,jsx}",
+        "**/src/*.{js,jsx}"
+    ],
+    coveragePathIgnorePatterns :["node_modules","demo","dist"],
+    coverageThreshold: {			    // 测试覆盖率通过阈值
+        global: {
+            branches: 90,
+            functions: 90,
+            lines: 90,
+            statements: 90
+        }
     }
   };

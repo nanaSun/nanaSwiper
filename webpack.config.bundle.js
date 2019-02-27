@@ -36,7 +36,8 @@ const config = {
   entry: path.join(__dirname, 'index.js'),
   output: {
     path: path.join(__dirname,"dist"),
-    filename: 'nanaSwiper.js',
+    filename: 'nanaSwiper.umd.js',
+    //filename: 'nanaSwiper.cjs.js',
     libraryTarget: "umd",
     library: "Swiper",
     umdNamedDefine: true
@@ -58,7 +59,13 @@ const config = {
        amd: 'react',
        commonjs: 'react',
        commonjs2: 'react' 
-    }
+    },
+    "prop-types":{ 
+      root: 'prop-types',
+      amd: 'prop-types',
+      commonjs: 'prop-types',
+      commonjs2: 'prop-types' 
+   }
   },
   module: {
     rules: [

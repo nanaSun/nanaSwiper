@@ -1,5 +1,21 @@
 # Nana's Swiper
 
+You can install it by npm:
+
+```
+npm install --save nanaswiper
+```
+
+you can import it use ES6 `import Swiper,{SwiperSlider} from 'nanaswiper'`。
+
+Or CommonJS 
+
+```
+const Swiper=require('nanaswiper').default
+const SwiperSlider=require('nanaswiper').SwiperSlider`
+```
+
+
 Major change:
     
     Change how to set slider, less configuration and makes it like react-router's style
@@ -161,6 +177,7 @@ How to use? You can directly use it in browser.
 ```
     <script src="https://cdn.bootcss.com/react/16.8.1/umd/react.profiling.min.js"></script>
     <script src="https://cdn.bootcss.com/react-dom/16.8.1/umd/react-dom.profiling.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prop-types/15.6.0/prop-types.js"></script>
     <script src="./nanaSwiper.js"></script>
     <script>
         const  slider=React.createElement(
