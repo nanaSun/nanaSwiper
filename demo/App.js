@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import './App.scss';
+import '../dist/SwiperCSS.css';
 import {SpirteSlider} from "./pages/SpirteSlider"
 import {NormalSlider} from "./pages/NormalSlider"
 import {LoopSlider} from "./pages/LoopSlider"

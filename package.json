@@ -5,7 +5,7 @@
   "scripts": {
     "test": "jest --config .jest.js",
     "start": "node ./webpackDevServer.js",
-    "broswer": "webpack --config ./webpack.config.bundle.js"
+    "build": "webpack --config ./webpack.config.bundle.js"
   },
   "module": "dist/nanaSwiper.umd.js",
   "repository": {
@@ -21,6 +21,9 @@
     "not ie <= 11",
     "not op_mini all"
   ],
+  "jest": {
+    "setupFiles": ["jest-canvas-mock"]
+  },
   "peerDependencies": {
     "prop-types": "^15.7.2",
     "react": "^16.8.1"
@@ -59,14 +62,17 @@
     "html-webpack-plugin": "^3.2.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^24.1.0",
+    "jest-canvas-mock": "^2.0.0-alpha.3",
     "mini-css-extract-plugin": "^0.5.0",
     "node-sass": "^4.11.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
     "postcss-flexbugs-fixes": "^4.1.0",
     "postcss-loader": "^3.0.0",
     "postcss-preset-env": "^6.5.0",
     "react-test-renderer": "^16.8.3",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
+    "uglifyjs-webpack-plugin": "^2.1.2",
     "url-loader": "^1.1.2",
     "webpack": "^4.29.3",
     "webpack-cli": "^3.2.3",

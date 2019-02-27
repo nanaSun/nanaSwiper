@@ -1,13 +1,14 @@
 const path = require('path');
 const webpack = require('webpack');
-
-const cssRegex = /\.css$/;
-const cssModuleRegex = /\.module\.css$/;
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
 const getStyleLoaders = (cssOptions, preProcessor) => {
   const loaders = [
-    require.resolve('style-loader'),
+    //require.resolve('style-loader'),
+    MiniCssExtractPlugin.loader,
     {
       loader: require.resolve('css-loader'),
       options: cssOptions,
@@ -33,10 +34,23 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
 const config = {
   context:__dirname,
   mode: 'production',
-  entry: path.join(__dirname, 'index.js'),
+  entry: {
+    Swiper:path.join(__dirname, 'index.js'),
+    SwiperCSS:path.join(__dirname, './src/styles/Swiper.scss')
+  },
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        cache: true,
+        parallel: true,
+        sourceMap: true // set to true if you want JS source maps
+      }),
+      new OptimizeCSSAssetsPlugin({})
+    ]
+  },
   output: {
     path: path.join(__dirname,"dist"),
-    filename: 'nanaSwiper.umd.js',
+    filename: '[name].umd.js',
     //filename: 'nanaSwiper.cjs.js',
     libraryTarget: "umd",
     library: "Swiper",
@@ -48,10 +62,13 @@ const config = {
   plugins: [
     new webpack.DefinePlugin({ 
       'process.env': { 
-        NODE_ENV: JSON.stringify("development"), 
+        NODE_ENV: JSON.stringify("production"), 
         PUBLIC_URL: JSON.stringify("")
       } 
     }),
+    new MiniCssExtractPlugin({
+      filename: "[name].css"
+    })
   ],
   externals:{
     react:{ 
@@ -75,34 +92,10 @@ const config = {
         loader: 'babel-loader'
       },
       {
-        test: cssRegex,
-        exclude: cssModuleRegex,
-        use: getStyleLoaders({
-          importLoaders: 1,
-        }),
-      },
-      {
-        test: cssModuleRegex,
-        use: getStyleLoaders({
-          importLoaders: 1,
-          modules: true
-        }),
-      },
-      {
         test: sassRegex,
         exclude: sassModuleRegex,
-        use: getStyleLoaders({ importLoaders: 2 }, 'sass-loader'),
-      },
-      {
-        test: sassModuleRegex,
-        use: getStyleLoaders(
-          {
-            importLoaders: 2,
-            modules: true
-          },
-          'sass-loader'
-        ),
-      },
+        use: getStyleLoaders({ importLoaders: 2 }, 'sass-loader')
+      }
     ]
   }
 };

@@ -1,9 +1,7 @@
 import React,{Component,Fragment} from 'react'
-import SwiperCSS from './styles/Swiper.module.scss'
 import SwiperContext from "./SwiperContext";
 import {checkTouch} from './utils'
 import PropTypes from "prop-types";
-
 const  supportTouch=checkTouch()
 
 class Swiper extends Component{
@@ -24,6 +22,12 @@ class Swiper extends Component{
     sliders=[]
     bounds={}
     boundsMove={}
+    SwiperWrapper="SwiperWrapper"
+    SwiperSlider="SwiperSlider"
+    SwiperActive="SwiperActive"
+    SwiperSliderNav="SwiperSliderNav"
+    SwiperItemNav="SwiperItemNav"
+    SwiperNavActive="SwiperNavActive"
     constructor(props){
         super(props)
         this.slideType=props.slideType||this.slideType;
@@ -185,15 +189,19 @@ class Swiper extends Component{
         let {moveX,isTransition}=this.state,
             transitionDuration=isTransition?"300ms":"0ms",
             transformX=`translate3d(${moveX}px, 0px, 0px)`
+
+        let {SwiperWrapper,SwiperSlider,SwiperActive,SwiperSliderNav,SwiperItemNav,SwiperNavActive}=this
         const props = {
             ...this.state,
             isMoving:this.isMoving,
-            currentSliderIndex:this.currentSliderIndex
+            currentSliderIndex:this.currentSliderIndex,
+            SwiperSlider,
+            SwiperActive
         };
         return (<Fragment>
             {/* 滑动主体 */}
             <div 
-                className={`${SwiperCSS.SwiperWrapper} ${SwiperCSS[this.slideType]?SwiperCSS[this.slideType]:""}`}
+                className={SwiperWrapper}
                 onTouchStart={(e)=>{this.touchstart(e)}}
                 onTouchMove={(e)=>{this.touchmove(e)}}
                 onTouchEnd={(e)=>{this.touchend(e)}}
@@ -216,10 +224,10 @@ class Swiper extends Component{
             />
             </div>
             {/* 导航点 */}
-            <div className={`${SwiperCSS.SwiperSliderNav}`} >
+            <div className={SwiperSliderNav} >
                 {this.sliders.map((color,index)=>
                 <Fragment key={`nav_${index}`}>{this.isLoop&&(index===0||index===this.bounds.max)?"":
-                <div className={`${SwiperCSS.SwiperItemNav} ${this.currentSliderIndex===index?SwiperCSS.SwiperNavActive:""}`}
+                <div className={`${SwiperItemNav} ${this.currentSliderIndex===index?SwiperNavActive:''}`}
                 onClickCapture={()=>{this.clickSlideTo(index)}} 
                 ></div>}
                 </Fragment>
