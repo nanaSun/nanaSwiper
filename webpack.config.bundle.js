@@ -35,7 +35,7 @@ const config = {
   context:__dirname,
   mode: 'production',
   entry: {
-    Swiper:path.join(__dirname, 'index.js'),
+    nanaSwiper:path.join(__dirname, 'index.js'),
     SwiperCSS:path.join(__dirname, './src/styles/Swiper.scss')
   },
   optimization: {
